@@ -38,6 +38,6 @@ The system behaves as a fully decoupled microservices architecture running synch
 
 ## 🤝 Contributions
 
-Gurukarthik B 
-Raheesh A
-Sakthi Priya K
+- Raheesh A
+- Sakthi Priya K
+- Gurukarthik B

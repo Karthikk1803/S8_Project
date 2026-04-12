@@ -1,0 +1,46 @@
+{
+  "cities": [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata",
+    "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal",
+    "Visakhapatnam", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad",
+    "Meerut", "Rajkot", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar",
+    "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada",
+    "Jodhpur", "Madurai", "Raipur", "Kota", "Chandigarh", "Guwahati", "Solapur",
+    "Hubli", "Tiruchirappalli", "Tiruppur", "Moradabad", "Mysore", "Bareilly",
+    "Gurgaon", "Aligarh", "Jalandhar", "Salem", "Bhubaneswar", "Warangal",
+    "Guntur", "Bikaner", "Noida", "Jamshedpur", "Bhilai", "Cuttack",
+    "Firozabad", "Kochi", "Nellore", "Bhavnagar", "Dehradun", "Durgapur",
+    "Asansol", "Rourkela", "Nanded", "Kolhapur", "Ajmer", "Akola", "Gulbarga",
+    "Jamnagar", "Ujjain", "Loni", "Siliguri", "Jhansi", "Ulhasnagar",
+    "Thiruvananthapuram", "Mangalore", "Erode", "Belgaum", "Ambattur",
+    "Tirunelveli", "Malegaon", "Gaya", "Udaipur", "Kakinada", "Davanagere",
+    "Kozhikode", "Maheshtala", "Rajpur Sonarpur", "Bokaro", "South Dumdum"
+  ],
+  "chennaiLocalities": [
+    "T Nagar", "Velachery", "Adyar", "Anna Nagar", "Guindy", "Mylapore",
+    "Besant Nagar", "Alwarpet", "Nungambakkam", "Egmore", "Kodambakkam",
+    "Chromepet", "Tambaram", "Porur", "Perambur", "Royapettah", "Kilpauk",
+    "Saidapet", "Ashok Nagar", "West Mambalam", "Thiruvanmiyur",
+    "Sholinganallur", "Perungudi", "Taramani", "Medavakkam", "Pallavaram",
+    "Ambattur", "Avadi", "Madhavaram", "Kolathur", "Villivakkam",
+    "Tondiarpet", "Washermanpet", "George Town", "Triplicane",
+    "Chetpet", "Teynampet", "Gopalapuram", "Mandaveli", "Kotturpuram",
+    "Palavakkam", "Neelankarai", "Injambakkam", "Karapakkam", "OMR",
+    "ECR", "Thoraipakkam", "Navalur", "Siruseri", "Kelambakkam",
+    "Purasaiwalkam", "Ayanavaram", "Anna Salai", "Mount Road",
+    "Vadapalani", "Valasaravakkam", "Ramapuram", "Mogappair",
+    "Koyambedu", "CMBT", "Arumbakkam", "Aminjikarai", "Shenoy Nagar",
+    "ICF Colony", "Alandur", "St Thomas Mount", "Nanganallur",
+    "Adambakkam", "Madipakkam", "Keelkattalai", "Pallikaranai",
+    "Sithalapakkam", "Selaiyur", "Sembakkam", "Rajakilpakkam",
+    "Pammal", "Anakaputhur", "Chitlapakkam", "Hasthinapuram"
+  ],
+  "tamilNaduCities": [
+    "Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem",
+    "Tirunelveli", "Tiruppur", "Erode", "Vellore", "Thoothukudi",
+    "Dindigul", "Thanjavur", "Ranipet", "Sivakasi", "Karur",
+    "Udhagamandalam", "Hosur", "Nagercoil", "Kanchipuram", "Kumbakonam",
+    "Rajapalayam", "Pudukkottai", "Ambur", "Vaniyambadi", "Cuddalore",
+    "Villupuram", "Nagapattinam", "Perambalur", "Ariyalur", "Krishnagiri"
+  ]
+}

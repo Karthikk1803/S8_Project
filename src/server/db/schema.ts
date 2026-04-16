@@ -22,6 +22,8 @@ export const reports = sqliteTable("reports", {
   verificationResultJson: text("verification_result_json"),
   status: text("status").notNull().$default(() => "pending"),
   collectorId: integer("collector_id").references(() => users.id),
+  moderatorNotes: text("moderator_notes"),
+  tokenReward: integer("token_reward").notNull().$default(() => 0),
   createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
 });
 

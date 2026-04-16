@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Upload, Camera, MapPin, AlertTriangle, CheckCircle, Loader2, Send, Zap, BarChart3 } from "lucide-react";
+import { Upload, Camera, MapPin, AlertTriangle, CheckCircle, Loader2, Send, Zap, BarChart3, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -110,6 +110,14 @@ export default function ReportPage() {
     const reader = new FileReader();
     reader.onload = (ev) => setImagePreview(ev.target?.result as string);
     reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setClassification(null);
+    setAiError(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -307,6 +315,14 @@ export default function ReportPage() {
                 {classification?.detectedObjects && (
                   <img ref={imgRef} src={imagePreview} alt="" className="hidden" />
                 )}
+                {/* Remove image button */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleRemoveImage(); }}
+                  className="absolute top-2 right-2 h-8 w-8 rounded-full bg-red-500/90 hover:bg-red-600 text-white flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 backdrop-blur-sm"
+                  title="Remove image"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
             )}
             <input
@@ -387,6 +403,27 @@ export default function ReportPage() {
                     <strong>AI Note:</strong> The model had low confidence or no clear detections for this specific image. Providing a general waste classification fallback.
                   </p>
                 </div>
+              )}
+
+              {/* Token reward indicator */}
+              {classification.recyclable && (
+                classification.confidence >= 0.70 ? (
+                  <div className="rounded-xl p-3 flex items-center gap-2 mt-2" style={{ background: "rgba(34, 197, 94, 0.08)", border: "1px solid rgba(34, 197, 94, 0.2)" }}>
+                    <span className="text-lg">🎉</span>
+                    <div>
+                      <p className="text-sm font-semibold text-green-700">5 Tokens will be awarded!</p>
+                      <p className="text-[11px] text-green-600">High confidence recyclable waste detected ({Math.round(classification.confidence * 100)}% ≥ 70%)</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-xl p-3 flex items-center gap-2 mt-2" style={{ background: "rgba(245, 158, 11, 0.08)", border: "1px solid rgba(245, 158, 11, 0.2)" }}>
+                    <span className="text-lg">⏳</span>
+                    <div>
+                      <p className="text-sm font-semibold text-amber-700">Submitted for moderator review</p>
+                      <p className="text-[11px] text-amber-600">Confidence is below 70% — a moderator will verify and award tokens</p>
+                    </div>
+                  </div>
+                )
               )}
             </div>
           )}

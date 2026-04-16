@@ -31,6 +31,34 @@ export async function POST(req: NextRequest) {
 
     const { location, wasteType, amount, imageDataUrl, verificationResultJson, points } = parsed.data;
 
+    // Parse verification result to determine token eligibility
+    let confidence = 0;
+    let recyclable = false;
+    if (verificationResultJson) {
+      try {
+        const verification = JSON.parse(verificationResultJson);
+        confidence = verification.confidence || 0;
+        recyclable = verification.recyclable || false;
+      } catch {
+        // ignore parse errors
+      }
+    }
+
+    // Determine status and token reward
+    let reportStatus = "pending";
+    let tokenReward = 0;
+
+    if (recyclable && confidence >= 0.70) {
+      // High confidence recyclable: auto-award 5 tokens
+      tokenReward = 5;
+      reportStatus = "pending";
+    } else if (recyclable && confidence < 0.70) {
+      // Low confidence recyclable: needs moderator review
+      tokenReward = 0;
+      reportStatus = "pending_review";
+    }
+    // Non-recyclable: status stays "pending", no token reward
+
     const result = db.insert(reports).values({
       userId: session.userId,
       location,
@@ -38,13 +66,14 @@ export async function POST(req: NextRequest) {
       amount,
       imageDataUrl: imageDataUrl || null,
       verificationResultJson: verificationResultJson || null,
-      status: "pending",
+      status: reportStatus,
+      tokenReward,
       createdAt: new Date().toISOString(),
     }).run();
 
     const reportId = Number(result.lastInsertRowid);
 
-    // Award credits
+    // Award base credits for reporting
     const earnedPoints = points || 10;
     addLedgerEntry(
       session.userId,
@@ -54,10 +83,28 @@ export async function POST(req: NextRequest) {
       `report:${reportId}`
     );
 
+    // Award token bonus if eligible (recyclable + high confidence)
+    if (tokenReward > 0) {
+      addLedgerEntry(
+        session.userId,
+        "earn_token_report",
+        tokenReward,
+        `Earned ${tokenReward} bonus tokens for reporting recyclable ${wasteType} waste (${Math.round(confidence * 100)}% confidence)`,
+        `report:${reportId}`
+      );
+    }
+
     // Create notification
+    let notifMessage = `Your waste report for ${wasteType} has been submitted and you earned ${earnedPoints} credits!`;
+    if (tokenReward > 0) {
+      notifMessage += ` Plus ${tokenReward} bonus tokens for recyclable waste! 🎉`;
+    } else if (reportStatus === "pending_review") {
+      notifMessage += ` Your recyclable waste report is pending moderator review for token eligibility.`;
+    }
+
     db.insert(notifications).values({
       userId: session.userId,
-      message: `Your waste report for ${wasteType} has been submitted and you earned ${earnedPoints} credits!`,
+      message: notifMessage,
       type: "reward",
       isRead: 0,
       createdAt: new Date().toISOString(),
@@ -66,7 +113,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       id: reportId,
       pointsEarned: earnedPoints,
-      message: "Report submitted successfully",
+      tokenReward,
+      status: reportStatus,
+      message: reportStatus === "pending_review"
+        ? "Report submitted! Pending moderator review for token reward."
+        : "Report submitted successfully",
     });
   } catch (error: any) {
     console.error("Create report error:", error);

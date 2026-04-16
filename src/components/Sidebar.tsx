@@ -22,7 +22,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     { href: "/", label: "Home", icon: Home, show: true },
     { href: "/marketplace", label: "Marketplace", icon: Store, show: true },
     { href: "/sell", label: "Sell Items", icon: Tag, show: role === "seller" || role === "admin" },
-    { href: "/admin", label: "Admin Dashboard", icon: ShieldCheck, show: role === "admin" },
+    { href: "/admin", label: role === "moderator" ? "Moderation" : "Admin Dashboard", icon: ShieldCheck, show: role === "admin" || role === "moderator" },
     { href: "/report", label: "Report Waste", icon: FileText, show: true },
     { href: "/collect", label: "Collect Waste", icon: Trash2, show: true },
     { href: "/rewards", label: "Rewards", icon: Gift, show: true },
@@ -80,6 +80,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 onClick={onClose}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group",

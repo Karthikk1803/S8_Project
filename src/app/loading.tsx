@@ -1,12 +1,19 @@
-import { Loader2 } from "lucide-react";
-
 export default function GlobalLoading() {
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm animate-fade-in" style={{ background: "rgba(0,0,0,0.1)" }}>
-      <div className="flex flex-col items-center gap-4 glass-card p-6 rounded-2xl shadow-xl border" style={{ borderColor: "var(--border)" }}>
-        <Loader2 className="h-10 w-10 animate-spin text-green-600" />
-        <p className="text-sm font-medium animate-pulse" style={{ color: "var(--muted-foreground)" }}>Loading content...</p>
-      </div>
+    <div className="fixed top-0 left-0 right-0 z-[9999] h-1">
+      <div
+        className="h-full bg-gradient-to-r from-green-500 via-emerald-400 to-green-500 rounded-r-full animate-progress"
+        style={{
+          animation: "progress 1.5s ease-in-out infinite",
+        }}
+      />
+      <style>{`
+        @keyframes progress {
+          0% { width: 0%; opacity: 1; }
+          50% { width: 70%; opacity: 1; }
+          100% { width: 100%; opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }

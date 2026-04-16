@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Search, Filter, ShoppingBag, Clock } from "lucide-react";
+import { Loader2, Search, Filter, ShoppingBag, Clock, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -153,6 +153,17 @@ export default function MarketplaceBrowsePage() {
           })}
         </div>
       )}
+
+      {/* Floating Action Button to Sell/List new waste item */}
+      <button
+        onClick={() => router.push('/sell')}
+        className="fixed bottom-8 right-8 lg:bottom-12 lg:right-12 h-14 w-14 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 z-[100] group border-2 border-white ring-4 ring-green-600/20"
+      >
+        <Plus className="h-6 w-6" />
+        <span className="absolute right-16 lg:right-20 bg-gray-900 text-white text-sm px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none font-medium shadow-lg">
+          Add Market Listing
+        </span>
+      </button>
     </div>
   );
 }

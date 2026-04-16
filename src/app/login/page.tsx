@@ -58,7 +58,7 @@ export default function LoginPage() {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: "pioneer@recopoint.in", password: "buyer1234" }),
+        body: JSON.stringify({ email: "pioneer@recopoint.in", password: "password" }),
       });
 
       if (!res.ok) {
@@ -67,7 +67,7 @@ export default function LoginPage() {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: "pioneer@recopoint.in", name: "Eco Pioneer", password: "buyer1234" }),
+          body: JSON.stringify({ email: "pioneer@recopoint.in", name: "Eco Pioneer", password: "password" }),
         });
         if (!signupRes.ok) {
           const data = await signupRes.json();

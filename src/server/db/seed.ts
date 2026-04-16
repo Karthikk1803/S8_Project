@@ -58,20 +58,34 @@ async function seed() {
     createdAt: new Date().toISOString(),
   }).run();
 
-  // Create Admin user
+  // Create Eco Pioneer user (Admin role for full access)
   const adminWallet = generateWallet();
   db.insert(users).values({
-    email: "admin@recopoint.in",
-    name: "admin",
+    email: "pioneer@recopoint.in",
+    name: "Eco Pioneer",
     passwordHash: commonHash,
     walletAddress: adminWallet.address,
     walletSecretEnc: adminWallet.encryptedSecret,
+    cryptoBalance: 0.0085, // ~$15 worth of ETH limit
     role: "admin",
+    createdAt: new Date().toISOString(),
+  }).run();
+
+  // Create Moderator user
+  const modWallet = generateWallet();
+  db.insert(users).values({
+    email: "moderator@recopoint.in",
+    name: "moderator",
+    passwordHash: commonHash,
+    walletAddress: modWallet.address,
+    walletSecretEnc: modWallet.encryptedSecret,
+    role: "moderator",
     createdAt: new Date().toISOString(),
   }).run();
 
   const buyer = db.select().from(users).where(eq(users.email, "guru@recopoint.in")).get()!;
   const seller = db.select().from(users).where(eq(users.email, "raheesh@recopoint.in")).get()!;
+  const admin = db.select().from(users).where(eq(users.email, "pioneer@recopoint.in")).get()!;
 
   // Give buyer some starting credits
   db.insert(ledgerEntries).values({
@@ -88,6 +102,15 @@ async function seed() {
     entryType: "earn_report",
     amountCredits: 50,
     description: "Welcome bonus credits",
+    createdAt: new Date().toISOString(),
+  }).run();
+
+  // Give Admin massive starting tokens/credits for demo
+  db.insert(ledgerEntries).values({
+    userId: admin.id,
+    entryType: "earn_token_report",
+    amountCredits: 12500,
+    description: "Admin Platform Tokens",
     createdAt: new Date().toISOString(),
   }).run();
 
@@ -178,6 +201,17 @@ async function seed() {
       verificationResultJson: JSON.stringify({ classification: "E-Waste", confidence: 0.99, recyclable: false }),
       status: "pending",
       createdAt: new Date(now.getTime() - 12 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      userId: seller.id,
+      location: "Andheri East Corporate Park",
+      wasteType: "Metal Scraps",
+      amount: "15 kg",
+      imageDataUrl: "https://images.unsplash.com/photo-1558346399-52d3a39e7829?q=80&w=800&auto=format&fit=crop",
+      verificationResultJson: JSON.stringify({ classification: "Metal", confidence: 0.91, recyclable: true }),
+      status: "in_progress", // This will show directly in Admin's Collect view as actionable!
+      collectorId: admin.id,
+      createdAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(),
     }
   ]).run();
 
@@ -231,10 +265,51 @@ async function seed() {
     }
   ]).run();
 
+  // Insert Admin Demo Chats
+  const chatThreadAdmin1 = db.insert(chatThreads).values({
+    buyerId: buyer.id,
+    sellerId: admin.id,
+    createdAt: new Date(now.getTime() - 1000 * 60 * 120).toISOString(),
+  }).returning().get();
+
+  const chatThreadAdmin2 = db.insert(chatThreads).values({
+    buyerId: seller.id,
+    sellerId: admin.id,
+    createdAt: new Date(now.getTime() - 1000 * 60 * 240).toISOString(),
+  }).returning().get();
+
+  db.insert(chatMessages).values([
+    {
+      threadId: chatThreadAdmin1.id,
+      senderId: buyer.id,
+      content: "Hello! I just wanted to say thank you for approving my waste collection so quickly earlier. The app perfectly tracked everything.",
+      createdAt: new Date(now.getTime() - 1000 * 60 * 115).toISOString(),
+    },
+    {
+      threadId: chatThreadAdmin1.id,
+      senderId: admin.id,
+      content: "Hi Guru, always happy to help! That's what the platform is built for. Your tokens should be in your wallet.",
+      createdAt: new Date(now.getTime() - 1000 * 60 * 110).toISOString(),
+    },
+    {
+      threadId: chatThreadAdmin2.id,
+      senderId: seller.id,
+      content: "Hi Eco Pioneer, I have a bulk textile drop coming in tomorrow from my factory. Are there specific marketplace slots I need to reserve?",
+      createdAt: new Date(now.getTime() - 1000 * 60 * 235).toISOString(),
+    },
+    {
+      threadId: chatThreadAdmin2.id,
+      senderId: admin.id,
+      content: "Hey Raheesh! Just list it normally through the Seller portal using the plus button. I'll personally verify the confidence score once it hits the queue.",
+      createdAt: new Date(now.getTime() - 1000 * 60 * 225).toISOString(),
+    }
+  ]).run();
+
   console.log("✅ Seed complete!");
-  console.log("   Buyer login:  guru@recopoint.in / password");
-  console.log("   Seller login: raheesh@recopoint.in / password");
-  console.log("   Admin login:  admin@recopoint.in / password");
+  console.log("   Buyer login:     guru@recopoint.in / password");
+  console.log("   Seller login:    raheesh@recopoint.in / password");
+  console.log("   Pioneer login:   pioneer@recopoint.in / password  <-- Use this for the demo!");
+  console.log("   Moderator login: moderator@recopoint.in / password");
   console.log("   Marketplace items: 3 (2 active, 1 pending)");
 }
 

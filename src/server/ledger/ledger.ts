@@ -2,7 +2,7 @@ import { db } from "../db/client";
 import { ledgerEntries } from "../db/schema";
 import { eq, sql } from "drizzle-orm";
 
-const ADD_TYPES = ["earn_report", "earn_collect", "purchase_upi", "transfer_in"];
+const ADD_TYPES = ["earn_report", "earn_collect", "earn_token_report", "purchase_upi", "transfer_in"];
 const SUB_TYPES = ["redeem", "transfer_out"];
 
 export function getBalance(userId: number): number {

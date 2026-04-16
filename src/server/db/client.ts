@@ -58,7 +58,13 @@ function ensureTables() {
       collector_id INTEGER REFERENCES users(id),
       created_at TEXT NOT NULL
     );
+  `);
 
+  // Migrations for reports table
+  safeAlter("ALTER TABLE reports ADD COLUMN moderator_notes TEXT;");
+  safeAlter("ALTER TABLE reports ADD COLUMN token_reward INTEGER NOT NULL DEFAULT 0;");
+
+  sqlite.exec(`
     CREATE TABLE IF NOT EXISTS notifications (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL REFERENCES users(id),
